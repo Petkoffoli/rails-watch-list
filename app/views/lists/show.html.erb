@@ -1,20 +1,30 @@
-<h1><%= @list.name %> List</h1>
-<p>Movies of the list below</p>
-
-<%= link_to "Bookmark a movie", new_list_bookmark_path(@list) %>
-
-<ul>
-  <% @list.movies.each do |movie| %>
-    <li><strong><%= movie.title %></strong> <br> <%= movie.overview %> <br>-
-      <% movie.bookmarks.each do |bookmark| %>
-        <% if bookmark.list_id == @list.id %>
-          <em><%= bookmark.comment %> - </em>
-          <%= link_to "Remove this bookmark", bookmark_path(bookmark), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
-        <% end %>
+<h1 class="text-center text-decoration-underline fs-1"><strong><%=@list.name %></strong></h1>
+<div class="container text-center d-flex justify-content-center gap-3">
+  <div class="card d-grid col-8" style="max-width: 600px;">
+    <div class="row border m-0 p-0 ">
+      <% @list.bookmarks.each do |bookmark| %>
+        <div class="col-md-4 d-flex align-items-center border-bottom">
+          <img src=<%=bookmark.movie.poster_url%> class="img-fluid" style="width: 10rem;" alt="Image of the movie">
+        </div>
+        <div class="col-md-8 border-bottom">
+          <div class="card-body fs-3">
+            <h2 class="card-title fs-2"><strong><%=bookmark.movie.title%></strong></h2>
+            <p class="card-text"><%=bookmark.movie.overview%></p>
+            <p class="card-text">Rating: <%=bookmark.movie.rating%></p>
+            <p class="card-text">Comment: <%=bookmark.comment%></p>
+            <%= link_to "Delete", bookmark_path(bookmark),data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class:"btn btn-primary"%>
+          </div>
+        </div>
       <% end %>
-    </li>
-    <br>
-  <% end %>
-</ul>
-
-<%= link_to "Back to Lists", lists_path %>
+    </div>
+  </div>
+  <div class="form_new_movie bg-light col-4">
+    <h2 class="my-12"><strong>New movie</strong></h2>
+    <%= simple_form_for [@list, @bookmark] do |f| %>
+      <%= f.association :movie %>
+      <%= f.input :comment %>
+      <%= f.submit "Create a movie", class: "btn btn-primary" %>
+    <% end %>
+    <%= link_to "Go back to the lists", lists_path, class:"btn btn-primary my-2"%>
+  </div>
+</div>

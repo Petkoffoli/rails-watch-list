@@ -1,10 +1,18 @@
-<h1>Movie Lists</h1>
-<p>Lists of movies</p>
-
-<ul>
-  <% @lists.each do |list| %>
-    <li><%= link_to list.name, list_path(list) %></li>
-  <% end %>
-</ul>
-
-<%= link_to "Create a list", lists_new_path %>
+<div class="banner mb-5" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(https://ktla.com/wp-content/uploads/sites/4/2022/09/movie-theater-popcorn.jpg);">
+</div>
+<div class="d-flex justify-content-center align-items-center gap-5">
+  <div >
+    <h1 class="text-center">Lists</h1>
+    <ul class="list-group list-unstyled gap-1 ">
+      <% @lists.each do |list| %>
+        <li><a href="<%=list_path(list) %>" class="list-group-item text-decoration-none" > <%=list.name %></a> </li>
+      <% end %>
+      </ul>
+  </div>
+  <div class="text-center fs-2">
+    <%= simple_form_for [@list] do |f| %>
+      <%= f.input :name %>
+      <%= f.submit "Create a List", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
